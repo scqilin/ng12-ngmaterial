@@ -1,32 +1,54 @@
-import { Component } from '@angular/core';
+import { Component,Inject } from '@angular/core';
+import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
+export interface DialogData {
+  img: string;
+}
 @Component({
   selector: 'app-root',
   template: `
-    <!--The content below is only a placeholder and can be replaced.-->
-    <div style="text-align:center" class="content">
+    <div style="text-align:center;margin-top:30px" class="content">
       <h1>
-        Welcome to {{title}}!
+        欢迎来到 {{title}}!
       </h1>
-      <span style="display: block">{{ title }} app is running!</span>
-      <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-    </div>
-    <h2>Here are some links to help you start: </h2>
-    <ul>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-      </li>
-    </ul>
+      <div>
+        <mat-card  *ngFor="let i of imgs" class="example-card">
+          <img (click)="openDialog(i)" mat-card-image src="assets/images/{{i}}" alt="">
+        </mat-card>
+      </div>
+
     <router-outlet></router-outlet>
   `,
-  styles: []
+  styles: [`
+    .example-card {
+    max-width: 300px;
+    margin: 10px;
+    float: left;
+    }
+  `]
 })
 export class AppComponent {
-  title = 'ng12-ngmaterial';
+  title = '猎人：荒野的召唤';
+  imgs = [ "1.jpg","2.jpg","3.jpg","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg","9.jpg","10.jpg","11.jpg","12.jpg"]
+  constructor(public dialog: MatDialog) {}
+  openDialog(imgurl:string) {
+    this.dialog.open(DialogElementsExampleDialog,{
+      data:{
+        img:imgurl
+      }
+    });
+  }
+}
+
+@Component({
+  selector: 'dialog-elements-example-dialog',
+  template:  `
+    <div style="max-width: 60vw;" >
+    <img style="width: 100%;" src="assets/images/{{data.img}}" alt="">
+    </div>
+
+  `,
+})
+export class DialogElementsExampleDialog {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 }
